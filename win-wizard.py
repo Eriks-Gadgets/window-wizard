@@ -3,6 +3,7 @@ print("Window Wizard event log")
 sg.theme("DarkBlue17")
 loading_window = sg.Popup("Window Wizard\n© Erik's Gadgets, 2023")
 win_window = sg.Window(title="Menu", layout=[[sg.Text("Window Wizard")],[sg.Button("New Window")],[sg.Button("Exit")],[sg.Text("© Erik's Gadgets")]], margins=(100, 50))
+textnum = 0
 while True:
     event, values = win_window.read()
     print(event)
@@ -31,7 +32,10 @@ while True:
         if dialogue == 1:
             win_window.close()
             win_window = sg.Window(title="Adjust", layout=[[sg.Text("Window Wizard")],objects,[sg.Button("Return [2]")],[sg.Text("© Erik's Gadgets")]], margins=(100, 50))
+            post_objects = objects
             del objects
+            objects = post_objects
+            del post_objects
     if event == "Return [2]":
         if dialogue == 1:
             objects = [sg.Button("Title"), sg.Button("Margins")]
@@ -57,10 +61,32 @@ while True:
             objects = [sg.Button("Title"), sg.Button("Margins")]
             my_custom_title = values[0]
             win_window = sg.Window(title="Window Wizard Menu", layout=[[sg.Menu([['File', ['Exit']],['Configurations', ['Add', 'Adjust', 'Delete']],])],[sg.Button("Preview")],[sg.Button("Exit")],[sg.Text("© Erik's Gadgets")]], margins=(100, 50))
+    if event == "Add":
+        if dialogue == 1:
+            win_window.close()
+            win_window = sg.Window(title="Add Item to '" + str(my_custom_title) + "'", layout=[[sg.Text("Window Wizard")],[sg.Button("Text")],[sg.Text("© Erik's Gadgets")]], margins=(100, 50))
+    if event == "Text":
+        if dialogue == 1:
+            win_window.close()
+            textnum += 1
+            objects.append(sg.Button("Text" + str(dialogue)))
+            additem = 1
+            win_window = sg.Window(title="Add Text Item: ", layout=[[sg.Input()],[sg.Button("Add Text Item")],[sg.Text("© Erik's Gadgets")]], margins=(100, 50))
+    if event == "Add Text Item":
+        if additem == 1:
+            win_window.close()
+            if my_layout_temp == [[]]:
+                my_layout_temp.append([sg.Text(values[0])])
+            else:
+                my_layout_temp.append([sg.Text(values[0])],)
+            my_layout_temp[-1] = [sg.Text(values[0])]
+            win_window = sg.Window(title="Window Wizard Menu", layout=[[sg.Menu([['File', ['Exit']],['Configurations', ['Add', 'Adjust', 'Delete']],])],[sg.Button("Preview")],[sg.Button("Exit")],[sg.Text("© Erik's Gadgets")]], margins=(100, 50))
     if event == "Preview":
         if dialogue == 1:
+            post_objects = objects
             del objects
-            objects = [sg.Button("Title"), sg.Button("Margins")]
+            objects = post_objects
+            del post_objects
             win_window.close()
             del my_custom_window_temp
             my_custom_window_temp = sg.Window(title=my_custom_title + " (Preview)", layout=my_layout_temp, margins=tuple(my_custom_margins)).read()
