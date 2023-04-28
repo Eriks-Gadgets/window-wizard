@@ -65,6 +65,18 @@ while True:
             objects = post_objects
             del post_objects
 
+    #brings up text library
+    if event == "Adjust Text Items":
+        pretzel = []
+        for i in temp_text:
+            in_library = True
+            proper_pretzel.append(sg.Button(i))
+            pretzel.append(i)
+            win_window.close()
+            print(temp_text)
+            win_window = sg.Window(title="Window Wizard Menu", layout=[x for x in proper_pretzel], margins=(100, 50))
+
+
     if in_library == True:
         if event in pretzel:
             #quick text configuration
@@ -78,6 +90,20 @@ while True:
             win_window = sg.Window(title="Add Text Item: ", layout=[[sg.Input(event)],[sg.Button("Edit Text Item")],[sg.Text("© Erik's Gadgets")]], margins=(100, 50))
         else:
             in_library = False
+
+    #Edits text item
+    if event == "Edit Text Item":
+        pretzel[position_pretzel] = values[0]
+        win_window.close()
+        if my_layout_temp == [[]]:
+            my_layout_temp.append([sg.Text(values[0])])
+        else:
+            my_layout_temp.append([sg.Text(values[0])],)
+            my_layout_temp[-1] = [sg.Text(values[0])]
+            temp_text.append(values[0])
+            text = values[0]
+            win_window = sg.Window(title="Window Wizard Menu", layout=[[sg.Menu([['File', ['Exit']],['Configurations', ['Add', 'Adjust', 'Delete']],])],[sg.Button("Preview")],[sg.Button("Exit")],[sg.Text("© Erik's Gadgets")]], margins=(100, 50))
+
 
     #brings you to the previous window
     if event == "Return [2]":
@@ -150,7 +176,16 @@ while True:
              objects = post_objects
              win_window.close()
              testing = 1
-             my_custom_window_temp = sg.Window(title=my_custom_title + " (Preview)", layout=[[sg.Text(string_cheese)]], margins=tuple(my_custom_margins)).read()
+             title2 = ""
+             if "~" in my_custom_title:
+                 for i in my_custom_title:
+                     if i == "~":
+                         break
+                     else:
+                         title2 += i
+             else:
+                 title2 = my_custom_title + " (Preview)"
+             my_custom_window_temp = sg.Window(title=title2, layout=[[sg.Text(string_cheese)]], margins=tuple(my_custom_margins)).read()
              win_window = sg.Window(title="Window Wizard Menu", layout=[[sg.Menu([['File', ['Exit']],['Configurations', ['Add', 'Adjust', 'Delete']],])],[sg.Button("Preview")],[sg.Button("Exit")],[sg.Text("© Erik's Gadgets")]], margins=(100, 50))
 
 
